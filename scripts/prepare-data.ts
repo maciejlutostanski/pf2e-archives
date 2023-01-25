@@ -1,15 +1,12 @@
 import { readdirSync, statSync, readFileSync, writeFileSync } from "fs";
 import { join, normalize } from "path";
+import { encode } from "msgpack-lite";
 
 const loadedData: any[] = [];
 const dataDir = normalize("scripts/data");
-let counter = 0;
-
-console.log(dataDir);
 
 loadAllData(dataDir);
-
-writeFileSync(normalize("scripts/test.json"), JSON.stringify(loadedData));
+writeFileSync(normalize("scripts/test.msp"), encode(loadedData));
 
 function loadAllData(path: string) {
   readdirSync(path).forEach((file) => {
@@ -20,9 +17,9 @@ function loadAllData(path: string) {
     } else {
       const fileData = JSON.parse(readFileSync(absolute).toString());
 
-      if (loadedData.findIndex((item) => item._id === fileData._id) === -1) {
-        loadedData.push(fileData);
-      }
+      delete fileData._id;
+
+      loadedData.push(fileData);
     }
   });
 }

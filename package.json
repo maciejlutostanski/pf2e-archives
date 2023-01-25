@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",
+    "msgpack-lite": "^0.1.26",
     "nedb-promises": "^6.2.1",
     "ts-node": "^10.9.1",
     "util": "^0.12.5"
