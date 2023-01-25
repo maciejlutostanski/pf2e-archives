@@ -2,14 +2,12 @@
   import { onMount } from "svelte";
   import { getActionsByPage } from "./db/actions";
   import { getFeatsByPage } from "./db/feats";
-  import { dbState, db } from "./db/init";
+  import { dbState, db, seedDb } from "./db/init";
   import Spinner from "./Spinner.svelte";
 
   async function load() {
-    const resp = await fetch("db.json");
-    const data = await resp.json();
-
-    db.insert(data);
+    const seeded = await seedDb();
+    console.log(seeded.length);
   }
 
   async function drop() {
@@ -17,7 +15,7 @@
   }
 
   async function getData() {
-    console.log(await getFeatsByPage(2));
+    console.log(await getFeatsByPage(0));
   }
 </script>
 

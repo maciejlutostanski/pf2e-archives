@@ -1,5 +1,4 @@
 import NeDB from "nedb-promises";
-import { promisify } from "util";
 import { writable } from "svelte/store";
 
 export const dbState = writable<{
@@ -11,7 +10,6 @@ export const db = NeDB.create({
   filename: "database",
   autoload: true,
   onload: async (err) => {
-    console.log("test");
     if (err) {
       dbState.set({ err, state: "err" });
     } else {
@@ -20,15 +18,10 @@ export const db = NeDB.create({
     }
   },
 });
-console.log(db);
 
-const populateDb = async () => {
-  const resp = await fetch("db.json");
+export const seedDb = async () => {
+  const resp = await fetch("db.json.gz");
   const data = await resp.json();
 
-  // promisify(db.insert(data));
-
-  // db.insert(data, (err, resp) => {
-  //   console.log(err, resp);
-  // });
+  return db.insert<any[]>(data);
 };
