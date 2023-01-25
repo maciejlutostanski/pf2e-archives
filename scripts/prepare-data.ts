@@ -3,7 +3,7 @@ import { join, normalize } from "path";
 import { encode } from "msgpack-lite";
 
 const loadedData: any[] = [];
-const dataDir = normalize("scripts/data");
+const dataDir = normalize("scripts/pf2e/pacs/data");
 
 loadAllData(dataDir);
 writeFileSync(normalize("scripts/test.msp"), encode(loadedData));
