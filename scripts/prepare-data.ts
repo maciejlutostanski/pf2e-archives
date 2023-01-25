@@ -1,14 +1,6 @@
-import {
-  readdirSync,
-  statSync,
-  readFileSync,
-  writeFileSync,
-  createReadStream,
-  createWriteStream,
-  unlinkSync,
-} from "fs";
+import { readdirSync, statSync, readFileSync, writeFileSync } from "fs";
 import { join, normalize } from "path";
-import { createGzip } from "zlib";
+import { gzipSync } from "zlib";
 import fs from "fs-extra";
 
 prepareDbData();
@@ -17,15 +9,22 @@ copyAssets();
 // ------------------- Functions ------------------------ //
 
 function prepareDbData() {
-  console.log("Preparing Database Data");
+  const startTime = new Date().getTime();
+  console.log("Preparing Database");
   const loadedData: any[] = [];
   const dataDir = normalize("scripts/pf2e/packs/data");
-  const dbFile = normalize("static/db.json");
+  const dbFile = normalize("static/db.json.gz");
 
-  loadAllData(dataDir);
-  writeFileSync(dbFile, JSON.stringify(loadedData));
-  compressFile(dbFile);
-  console.log("Database Data Saved");
+  try {
+    loadAllData(dataDir);
+    writeFileSync(dbFile, gzipSync(JSON.stringify(loadedData)));
+
+    const endTime = new Date().getTime();
+    console.log(`Finished in: ${endTime - startTime}ms`);
+  } catch (err) {
+    console.error(err);
+  }
+  return;
 
   function loadAllData(path: string) {
     readdirSync(path).forEach((file) => {
@@ -44,19 +43,21 @@ function prepareDbData() {
   }
 }
 
-function compressFile(filePath: string) {
-  const stream = createReadStream(filePath);
-  stream
-    .pipe(createGzip())
-    .pipe(createWriteStream(`${filePath}.gz`))
-    .on("finish", () => {
-      console.log(`Successfully compressed the file at ${filePath}`);
-      unlinkSync(filePath);
-    });
-}
+// async function compressFile(filePath: string) {
+//   const stream = createReadStream(filePath);
+//   stream.pipe(createGzip()).pipe(createWriteStream(`${filePath}.gz`));
+
+//   await new Promise((resolve, reject) => {
+//     stream.on("finish", resolve);
+//     stream.on("error", reject);
+//   });
+
+//   return;
+// }
 
 function copyAssets() {
-  console.log("Copping assets start");
+  const startTime = new Date().getTime();
+  console.log("Copping assets");
   const srcDir = `scripts/pf2e/static/icons`;
   const destDir = `static/systems/pf2e/icons`;
 
@@ -65,5 +66,6 @@ function copyAssets() {
   } catch (err) {
     console.error(err);
   }
-  console.log("Copping assets done");
+  const endTime = new Date().getTime();
+  console.log(`Finished in: ${endTime - startTime}ms`);
 }
