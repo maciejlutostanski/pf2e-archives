@@ -1,4 +1,100 @@
-<script>
+<script lang="ts">
+  import { getActions } from "$lib/db/actions";
+  import VirtualScroll from "svelte-virtual-scroll-list";
+
+  let actions = getActions();
 </script>
 
-<h1>Test</h1>
+{#await actions then items}
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+  <div>nazwa</div>
+{/await}
