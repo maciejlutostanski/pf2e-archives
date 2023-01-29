@@ -33,3 +33,5 @@ dist-ssr
 # Foundry modules files
 static/systems
 static/db.json.gz
+src-tauri/temp.db
+src-tauri/db

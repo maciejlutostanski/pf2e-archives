@@ -67,8 +67,8 @@
                   <tr>
                     <td
                       class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 hover:text-sky-700 cursor-pointer sm:pl-6 lg:pl-8"
-                      on:click={() => preserveScroll(item._id)}
-                      on:keypress={() => preserveScroll(item._id)}
+                      on:click={() => preserveScroll(item.id)}
+                      on:keypress={() => preserveScroll(item.id)}
                     >
                       <div class="text-base font-bold">
                         {item.name}

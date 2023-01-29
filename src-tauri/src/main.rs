@@ -1,43 +1,51 @@
-use couchbase_lite::{
-    Database, Document, DatabaseFlags,
-    fallible_streaming_iterator::FallibleStreamingIterator
-};
+pub mod database;
 
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(tag = "type")]
-struct Message {
-    msg: String,
-}
+use surrealdb::Datastore;
+use surrealdb::Error;
+use surrealdb::Session;
 
-#![cfg_attr(
+use crate::database::*;
+
+#[cfg_attr(
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+// #[tauri::command]
+// async fn test(
+//     database: tauri::State<'_, Datastore>,
+//     session: tauri::State<'_, Session>,
+// ) -> Result<String, Error> {
+//     let db = &*database;
+//     let ses = &*session;
+
+//     let new_db = "CREATE company:surrealdb SET name = 'SurrealDB', cofounders = [person:tobie, person:jaime];";
+//     db.execute(new_db, &ses, None, false).await?;
+
+//     let ast = "SELECT * FROM company:surrealdb;";
+//     let res = db.execute(ast, &ses, None, false).await?;
+
+//     println!("{}", res.len());
+//     // for item in res {
+//     //     println!("{}", item.result.unwrap());
+//     // }
+
+//     Ok(res[0].result.as_ref().unwrap().to_string())
+// }
+
 fn main() {
-    let mut db = Database::open_with_flags(
-        &std::env::temp_dir().join("a.cblite2"),
-        DatabaseFlags::CREATE,
-    )?;
-    {
-        let msg = Message { msg: "Test message".into() };
-        let mut trans = db.transaction()?;
-        let enc = trans.shared_encoder_session()?;
-        let mut doc = Document::new(&msg, enc)?;
-        trans.save(&mut doc)?;
-        trans.commit()?;
-    }
-    println!("we have {} documents in db", db.document_count());
+    // // let database = Datastore::new("file://temp.db").await?;
+    // let database = Datastore::new("memory").await?;
+    // let session = Session::for_db("ns", "pf2");
 
     tauri::Builder::default()
-        .plugin(tauri_plugin_sqlite::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .plugin(tauri_plugin_sql::Builder::default().build())
+        .invoke_handler(tauri::generate_handler![greet,])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

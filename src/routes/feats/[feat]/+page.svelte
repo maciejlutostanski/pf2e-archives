@@ -1,13 +1,9 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { getFeatByName } from "$lib/db/feats";
+  import { getFeatById } from "$lib/db/feats";
   import TraitBox from "$lib/shared/TraitBox.svelte";
 
-  const featData = getFeatByName($page.params.feat);
-
-  featData.then((data) => {
-    console.log(data);
-  });
+  const featData = getFeatById($page.params.feat);
 </script>
 
 {#await featData then data}

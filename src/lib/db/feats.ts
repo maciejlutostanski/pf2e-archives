@@ -1,7 +1,9 @@
 import { PAGE_SIZE } from "$lib/config/lists";
 import { db } from "./init";
+import { invoke } from "@tauri-apps/api/tauri";
 
 export type Feat = {
+  id: string;
   name: string;
   img: string;
   system: {
@@ -26,18 +28,33 @@ export type Feat = {
   };
 };
 
-export const getFeatsByPage = async (page: number = 0) => {
-  return db
-    .find<Feat>({ type: "feat" })
-    .sort({ name: 1 })
-    .skip(PAGE_SIZE * page)
-    .limit(100);
+type TotalCount = {
+  count: number;
 };
 
-export const getFeatsCount = async () => {
-  return db.count({ type: "feat" });
+export const getFeatsByPage = async (page: number = 0): Promise<Feat[]> => {
+  return invoke("get_entity_by_page", {
+    entity: "feats",
+    limit: 50,
+    skip: PAGE_SIZE * page,
+  });
 };
 
-export const getFeatByName = async (_id: string) => {
-  return db.findOne<Feat>({ _id, type: "feat" });
+export const getFeatsCount = async (): Promise<number> => {
+  const start = new Date().getTime();
+  const res = (await invoke("get_entity_count", {
+    entity: "feats",
+  })) as TotalCount[];
+  const end = new Date().getTime();
+  console.log(end - start);
+
+  return res[0].count;
+};
+
+export const getFeatById = async (id: string): Promise<Feat> => {
+  const res = (await invoke("get_entity_by_id", {
+    id,
+  })) as Feat[];
+
+  return res[0];
 };

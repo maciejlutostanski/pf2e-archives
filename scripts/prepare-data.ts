@@ -12,12 +12,25 @@ function prepareDbData() {
   const startTime = new Date().getTime();
   console.log("Preparing Database");
   const loadedData: any[] = [];
+  let loadedDataTypes: any = {};
+
   const dataDir = normalize("scripts/pf2e/packs/data");
   const dbFile = normalize("static/db.json.gz");
 
   try {
     loadAllData(dataDir);
-    writeFileSync(dbFile, gzipSync(JSON.stringify(loadedData)));
+
+    if (!fs.existsSync(normalize("src-tauri/db"))) {
+      fs.mkdirSync(normalize("src-tauri/db"));
+    }
+
+    Object.keys(loadedDataTypes).forEach((key) => {
+      // writeFileSync(dbFile, gzipSync(JSON.stringify(loadedData)));
+      fs.writeFileSync(
+        normalize(`src-tauri/db/${key}.json`),
+        JSON.stringify(loadedDataTypes[key])
+      );
+    });
 
     const endTime = new Date().getTime();
     console.log(`Finished in: ${endTime - startTime}ms`);
@@ -37,7 +50,11 @@ function prepareDbData() {
 
         delete fileData._id;
 
-        loadedData.push(fileData);
+        if (!loadedDataTypes[fileData.type]) {
+          loadedDataTypes[fileData.type] = [];
+        }
+
+        loadedDataTypes[fileData.type].push(fileData);
       }
     });
   }
